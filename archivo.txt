@@ -1,0 +1,3 @@
+x = 3;
+A -> y = x + 3;
+imprimir(A);
