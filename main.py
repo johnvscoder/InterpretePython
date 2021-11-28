@@ -1,5 +1,5 @@
-from utilidades import tokenizar
+from utilidades import tokenizar, sintaxis
 with open('archivo.txt') as f:
     entrada = f.read()
-    lista = tokenizar(entrada)
+    lista = tokenizar('  \t\n ')
     print(lista)

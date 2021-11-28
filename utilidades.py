@@ -1,4 +1,12 @@
+# Separa una cadena de texto en tokens
 def tokenizar(entrada):
+    if entrada == None:
+        print('Error. Argumento None')
+        return None
+    if entrada == '':
+        print('Error. cadena vacía')
+        return None
+
     # Guarda la lista de tokens
     lista =[]
 
@@ -29,4 +37,41 @@ def tokenizar(entrada):
         if not(entrada[i].isalnum()):
             lista.append(entrada[i])
         i = i + 1
+    
+    if len(lista) == 0:
+        print('Error. No hay tokens')
+        return None
     return lista
+
+
+# Separa los tokens en instrucciones y detecta
+# de qué tipo es cada instrucción
+def sintaxis(tokens):
+    # Guarda las instrucciones
+    lista = []
+    # Guarada una instrucción
+    instruccion = []
+
+    # Este ciclo separa las instrucciones por ;
+    # y las guarda en lista
+    for token in tokens:
+        if token == ';':
+            lista.append(instruccion)
+            instruccion = []
+        else:
+            instruccion.append(token)
+    
+    # Si el último token no es ;
+    # la última instrucción pudo no haberse guardado
+    # en el ciclo anterior, entonces se guarda aquí.
+    if len(instruccion) != 0:
+        lista.append(instruccion)
+    return lista
+
+# Dice a qué tipo pertenece una instrucción
+def tipoInstruccion(tokens):
+    # Si el primer token es número
+    # no es identificador y eso es un error
+    if tokens[0].isdecimal():
+        print('Error. se esperaba un identificador y se obtuvo un número')
+    
