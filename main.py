@@ -1,7 +1,6 @@
-from utilidades import tokenizar, sintaxis, esEcuacion
-# with open('archivo.txt') as f:
-#     entrada = f.read()
-#     lista = tokenizar('  \t\n ')
-#     print(lista)
-
-print(esEcuacion(['A', '-', '>', 'y', '=', 'x', '*', '3']))
+from utilidades import tokenizar, sintaxis
+with open('archivo.txt') as f:
+    entrada = f.read()
+    lista = tokenizar(entrada)
+    sintaxis1 = sintaxis(lista)
+    print(sintaxis1)

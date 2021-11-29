@@ -46,6 +46,7 @@ def tokenizar(entrada):
 
 # Separa los tokens en instrucciones y detecta
 # de qué tipo es cada instrucción
+# probado
 def sintaxis(tokens):
     # Guarda las instrucciones
     lista = []
@@ -56,6 +57,9 @@ def sintaxis(tokens):
     # y las guarda en lista
     for token in tokens:
         if token == ';':
+            if not(esInstruccionValida(instruccion)):
+                print('Error. Instrucción inválida')
+                return None
             lista.append(instruccion)
             instruccion = []
         else:
@@ -65,36 +69,22 @@ def sintaxis(tokens):
     # la última instrucción pudo no haberse guardado
     # en el ciclo anterior, entonces se guarda aquí.
     if len(instruccion) != 0:
+        if not(esInstruccionValida(instruccion)):
+            print('Error. Instrucción inválida')
+            return None
         lista.append(instruccion)
     return lista
 
-# Dice a qué tipo pertenece una instrucción
-# def tipoInstruccion(tokens):
-    
-#     lon = len(tokens)
-#     # Cada instrucción tiene al menos 3 tokens
-#     if lon < 3:
-#         print('Error. Instruccion inválida')
-#         return None
-#     # Si el primer token es número
-#     # no es identificador y eso es un error
-#     if tokens[0].isdecimal():
-#         print('Error. Instruccion inválida')
-#         return None
-#     if tokens[1] == '=':
-#         if not(tokens[2].isnum()):
-#             print('Error. Instruccion inválida')
-#             return None
-#         else:
-#             if lon > 3:
-#                 print('Error. Instruccion inválida')
-#                 return None
-#             else:
-#                 return 'asignacion'
-#     elif tokens[1] == '-':
-#         if tokens[2] == '>':
-#             print('')
+# probado
+def esInstruccionValida(tokens):
+    return esLlamada(tokens) or esAsignacion(tokens) or esEcuacion(tokens)
 
+# Probado
+def esLlamada(tokens):
+    if len(tokens) != 4:
+        return False
+    
+    return esIdentificador(tokens[0]) and tokens[1] == '(' and (esIdentificador(tokens[2]) or tokens[2].isdecimal()) and tokens[3] == ')'
 
 # Probado
 def esAsignacion(tokens):
