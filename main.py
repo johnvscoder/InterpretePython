@@ -4,4 +4,3 @@ with open('archivo.txt') as f:
     lista = tokenizar(entrada)
     sintaxis1 = sintaxis(lista)
     semantica = ejecutar(sintaxis1)
-    print(semantica)

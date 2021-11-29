@@ -1,7 +1,5 @@
-y = 400;
-A -> y = x + 3;
-x = 33;
-A -> x = z - 2333;
-imprimir(A);
-B -> y = y + 3;
-x = y;
+x = 30;
+z = 0;
+A -> z = x / y;
+resolver(A);
+imprimir(y);

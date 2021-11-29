@@ -48,6 +48,9 @@ def tokenizar(entrada):
 # de qué tipo es cada instrucción
 # probado
 def sintaxis(tokens):
+    if tokens == None:
+        print('Error. método sintaxis recibió argumento None')
+        return None
     # Guarda las instrucciones
     lista = []
     # Guarada una instrucción
@@ -173,7 +176,7 @@ def ejecutar(sintaxis):
                 print('Error. Invocación de función inválida')
                 return None
             if instruccion[0] == 'imprimir':
-                if instruccion[0].isdecimal():
+                if instruccion[2].isdecimal():
                     print(int(instruccion[2]))
                 else:
                     # Se verifica que la variable del argumento exista
@@ -186,7 +189,7 @@ def ejecutar(sintaxis):
                         return None
 
                     valor = variables[instruccion[2]]
-                    if isinstance(valor, int):
+                    if isinstance(valor, int) or isinstance(valor, float):
                         print(valor)
                     elif isinstance(valor, list):
                         ecuacion = ''
@@ -196,6 +199,156 @@ def ejecutar(sintaxis):
                         # Se elimina el espacio inicial agregado en el ciclo
                         ecuacion = ecuacion[1: len(ecuacion)]
                         print(ecuacion)
-            else:
-                print('Por ahora no es valido')
+            else: # En este caso la función es resolver
+                # Validamos que el argumento no sea un número pues no tiene sentido
+                # resolver un número
+                if instruccion[2].isdecimal():
+                    print('Error. Argumento inválido en llamada a la función resolver')
+                    return None
+                # Determinar si la variable del argumento existe
+                # y, si existe, se comprueba si guarda una ecuacion (una lista en este caso)
+                existeVariable = False
+                # Guardará la ecuación
+                valorVariable = None
+                for clave in variables:
+                    if clave == instruccion[2]:
+                        existeVariable = True
+                        # Guardamos la ecuación en la lista valorVariable
+                        valorVariable = variables[instruccion[2]]
+                        break
+                if not(existeVariable):
+                    print('Error. Argumento inválido en llamada a la función resolver')
+                    return None
+                # Verificamos que el valor de la variable no sea un entero
+                # pues no tiene sentido resolver un entero
+                if isinstance(valorVariable, int):
+                    print('Error. Argumento no hace referencia a una ecuación en llamada a la función resolver')
+                    return None
+                
+                # Verificamos cada variable y comprobamos que halla una sola incógnita
+                # y que las demás variables sean conocidas
+                # Además, calculamos los valores de cada término
+                hayIncognita = False
+                # En qué posición de la lista valorVariable está la incógnita
+                indiceIncognita = 0
+
+                # Los valores de cada término
+                valor1 = None
+                valor2 = None
+                valor3 = None
+
+                # Verificamos la primer variable
+                existeVariable = False
+                for clave in variables:
+                    if clave == valorVariable[0]:
+                        existeVariable = True
+                if not(existeVariable):
+                    hayIncognita = True
+                else:
+                    valor1 = variables[valorVariable[0]]
+                
+                # Verificamos la segunda variable
+                if esIdentificador(valorVariable[2]):
+                    existeVariable = False
+                    for clave in variables:
+                        if clave == valorVariable[2]:
+                            existeVariable = True
+                    if not(existeVariable):
+                        if hayIncognita:
+                            print('No se pudo resolver la ecuación', instruccion[2], 'porque tiene más de una incógnita')
+                            continue
+                        else:
+                            hayIncognita = True
+                            indiceIncognita = 2
+                    else:
+                        valor2 = variables[valorVariable[2]]
+                else:
+                    valor2 = int(valorVariable[2])
+                
+                # Verificamos la tercera variable
+                # si existe
+                if len(valorVariable) > 3:
+                    if esIdentificador(valorVariable[4]):
+                        existeVariable = False
+                        for clave in variables:
+                            if clave == valorVariable[4]:
+                                existeVariable = True
+                        if not(existeVariable):
+                            if hayIncognita:
+                                print('No se pudo resolver la ecuación', instruccion[2], 'porque tiene más de una incógnita')
+                                continue
+                            else:
+                                hayIncognita = True
+                                indiceIncognita = 4
+                        else:
+                            valor3 = variables[valorVariable[4]]
+                    else:
+                        valor3 = int(valorVariable[4])
+                
+                if not(hayIncognita):
+                    print('No se pudo resolver la ecuación', instruccion[2], 'porque no tiene incógnitas')
+                    continue
+                    
+                # Ahora se resuelve la ecuación
+                # Primero cuando en el miembro derecho hay operador
+                if len(valorVariable) > 3:
+                    operador = valorVariable[3]
+
+                    # Validamos que no haya divisón por cero
+                    if operador == '/' and valor3 == 0:
+                        print('No se pudo resolver la ecuación', instruccion[2], 'porque se halló una división por cero')
+                        continue
+
+                    if indiceIncognita == 0:
+                        respuesta = 0
+                        if operador == '+':
+                            respuesta = valor2 + valor3
+                        elif operador == '-':
+                            respuesta = valor2 - valor3
+                        elif operador == '*':
+                            respuesta = valor2 * valor3
+                        elif valor3 != 0:
+                            respuesta = valor2 / valor3
+                        else:
+                            print('No se pudo resolver la ecuación', instruccion[2], 'porque se halló una división por cero')
+                            continue
+                        variables.setdefault(valorVariable[0], respuesta)
+                    elif indiceIncognita == 2:
+                        respuesta = 0
+                        if operador == '+':
+                            respuesta = valor1 - valor3
+                        elif operador == '-':
+                            respuesta = valor1 + valor3
+                        elif operador == '*':
+                            if valor3 != 0:
+                                respuesta = valor1 / valor3
+                            else:
+                                print('No se pudo resolver la ecuación', instruccion[2], 'porque se halló una división por cero')
+                                continue
+                        elif operador == '/':
+                            respuesta = valor1 * valor3
+                        variables.setdefault(valorVariable[2], respuesta)
+                    elif indiceIncognita == 4:
+                        respuesta = 0
+                        if operador == '+':
+                            respuesta = valor1 - valor2
+                        elif operador == '-':
+                            respuesta = valor2 - valor1
+                        elif operador == '*':
+                            if valor2 != 0:
+                                respuesta = valor1 / valor2
+                            else:
+                                print('No se pudo resolver la ecuación', instruccion[2], 'porque se halló una división por cero')
+                                continue
+                        elif valor1 != 0:
+                            respuesta = valor2 / valor1
+                        else:
+                            print('No se pudo resolver la ecuación', instruccion[2], 'porque se halló una división por cero')
+                            continue
+                        variables.setdefault(valorVariable[4], respuesta)
+                else: # En este caso no hay operador en el miembro derecho
+                    if indiceIncognita == 0:
+                        variables.setdefault(valorVariable[0], valor2)
+                    else: # el indice es 2
+                        variables.setdefault(valorVariable[2], valor1)
     return variables
