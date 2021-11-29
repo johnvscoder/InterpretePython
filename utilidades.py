@@ -122,7 +122,7 @@ def esOperador(token):
 def ejecutar(sintaxis):
     if sintaxis == None:
         print('Error. Valor none')
-        return None
+        return
     
     variables = {}
     for instruccion in sintaxis:
@@ -136,7 +136,7 @@ def ejecutar(sintaxis):
                         existeValor = True
             if not(existeValor):
                 print('Error. Variable en asignación no existe')
-                exit()
+                return
             
             # Se obtiene el valor que se asignará
             valorFinal = 0
@@ -174,7 +174,7 @@ def ejecutar(sintaxis):
             # Se verifica que la función sea válida
             if not(instruccion[0] == 'imprimir') and not(instruccion[0] == 'resolver'):
                 print('Error. Invocación de función inválida')
-                return None
+                return
             if instruccion[0] == 'imprimir':
                 if instruccion[2].isdecimal():
                     print(int(instruccion[2]))
@@ -186,7 +186,7 @@ def ejecutar(sintaxis):
                             existeVariable = True
                     if not(existeVariable):
                         print('Error. Llamada a función con argumento que no existe')
-                        return None
+                        return
 
                     valor = variables[instruccion[2]]
                     if isinstance(valor, int) or isinstance(valor, float):
@@ -204,7 +204,7 @@ def ejecutar(sintaxis):
                 # resolver un número
                 if instruccion[2].isdecimal():
                     print('Error. Argumento inválido en llamada a la función resolver')
-                    return None
+                    return
                 # Determinar si la variable del argumento existe
                 # y, si existe, se comprueba si guarda una ecuacion (una lista en este caso)
                 existeVariable = False
@@ -218,12 +218,12 @@ def ejecutar(sintaxis):
                         break
                 if not(existeVariable):
                     print('Error. Argumento inválido en llamada a la función resolver')
-                    return None
+                    return
                 # Verificamos que el valor de la variable no sea un entero
                 # pues no tiene sentido resolver un entero
                 if isinstance(valorVariable, int):
                     print('Error. Argumento no hace referencia a una ecuación en llamada a la función resolver')
-                    return None
+                    return
                 
                 # Verificamos cada variable y comprobamos que halla una sola incógnita
                 # y que las demás variables sean conocidas
@@ -351,4 +351,3 @@ def ejecutar(sintaxis):
                         variables.setdefault(valorVariable[0], valor2)
                     else: # el indice es 2
                         variables.setdefault(valorVariable[2], valor1)
-    return variables

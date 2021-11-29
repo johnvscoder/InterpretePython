@@ -1,5 +1,0 @@
-x = 30;
-z = 10;
-A -> z = x / y;
-resolver(A);
-imprimir(y);
