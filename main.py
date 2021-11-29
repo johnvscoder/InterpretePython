@@ -1,6 +1,7 @@
-from utilidades import tokenizar, sintaxis
+from utilidades import tokenizar, sintaxis, ejecutar
 with open('archivo.txt') as f:
     entrada = f.read()
     lista = tokenizar(entrada)
     sintaxis1 = sintaxis(lista)
-    print(sintaxis1)
+    semantica = ejecutar(sintaxis1)
+    print(semantica)

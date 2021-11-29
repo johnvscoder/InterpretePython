@@ -115,3 +115,42 @@ def esIdentificador(token):
 # Probado
 def esOperador(token):
     return token == '+' or token == '-' or token == '*' or token == '/'
+
+def ejecutar(sintaxis):
+    if sintaxis == None:
+        print('Error. Valor none')
+        return None
+    
+    variables = {}
+    for instruccion in sintaxis:
+        if esAsignacion(instruccion):
+            # Comprobar que el valor que se asignará existe
+            existeValor = True
+            if not(instruccion[2].isdecimal()):
+                existeValor = False
+                for clave in variables:
+                    if clave == instruccion[2]:
+                        existeValor = True
+            if not(existeValor):
+                print('Error. Variable en asignación no existe')
+                exit()
+            
+            # Se obtiene el valor que se asignará
+            valorFinal = 0
+            if instruccion[2].isdecimal():
+                valorFinal = int(instruccion[2])
+            else:
+                valorFinal = int(variables[instruccion[2]])
+            
+            # Comprobar si la variable a la cual se asigna un valor existe
+            existeVariable = False
+            for clave in variables:
+                    if clave == instruccion[0]:
+                        existeVariable = True
+
+            # Asignar el valor a la variable
+            if existeVariable:
+                variables[instruccion[0]] = valorFinal
+            else:
+                variables.setdefault(instruccion[0], valorFinal)
+    return variables
