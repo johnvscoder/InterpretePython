@@ -69,9 +69,59 @@ def sintaxis(tokens):
     return lista
 
 # Dice a qué tipo pertenece una instrucción
-def tipoInstruccion(tokens):
-    # Si el primer token es número
-    # no es identificador y eso es un error
-    if tokens[0].isdecimal():
-        print('Error. se esperaba un identificador y se obtuvo un número')
+# def tipoInstruccion(tokens):
     
+#     lon = len(tokens)
+#     # Cada instrucción tiene al menos 3 tokens
+#     if lon < 3:
+#         print('Error. Instruccion inválida')
+#         return None
+#     # Si el primer token es número
+#     # no es identificador y eso es un error
+#     if tokens[0].isdecimal():
+#         print('Error. Instruccion inválida')
+#         return None
+#     if tokens[1] == '=':
+#         if not(tokens[2].isnum()):
+#             print('Error. Instruccion inválida')
+#             return None
+#         else:
+#             if lon > 3:
+#                 print('Error. Instruccion inválida')
+#                 return None
+#             else:
+#                 return 'asignacion'
+#     elif tokens[1] == '-':
+#         if tokens[2] == '>':
+#             print('')
+
+
+# Probado
+def esAsignacion(tokens):
+    # deben ser exactamente 3 tokens
+    if len(tokens) != 3:
+        return False
+    # la primera condición es que el primer token sea identificador
+    # la segunda condición es que el segundo token sea =
+    # la tercera condición es que el tercer token sea un número
+    return esIdentificador(tokens[0]) and tokens[1] == '=' and tokens[2].isdecimal()
+
+# Probado
+def esEcuacion(tokens):
+    if len(tokens) != 6 and len(tokens) != 8:
+        return False
+    
+    if len(tokens) == 6:
+        return esIdentificador(tokens[0]) and tokens[1] == '-' and tokens[2] == '>' and esIdentificador(tokens[3]) and tokens[4] == '=' and (esIdentificador(tokens[5]) or tokens[5].isdecimal())
+    if len(tokens) == 8:
+        return esIdentificador(tokens[0]) and tokens[1] == '-' and tokens[2] == '>' and esIdentificador(tokens[3]) and tokens[4] == '=' and (esIdentificador(tokens[5]) or tokens[5].isdecimal()) and esOperador(tokens[6]) and (esIdentificador(tokens[7]) or tokens[7].isdecimal())
+    
+# Probado
+def esIdentificador(token):
+    if token == None or len(token) == 0:
+        return False
+    return token.isalnum() and token[0].isalpha()
+
+# Probado
+def esOperador(token):
+    return token == '+' or token == '-' or token == '*' or token == '/'
