@@ -167,4 +167,35 @@ def ejecutar(sintaxis):
                 variables[instruccion[0]] = valorFinal
             else:
                 variables.setdefault(instruccion[0], valorFinal)
+        elif esLlamada(instruccion):
+            # Se verifica que la función sea válida
+            if not(instruccion[0] == 'imprimir') and not(instruccion[0] == 'resolver'):
+                print('Error. Invocación de función inválida')
+                return None
+            if instruccion[0] == 'imprimir':
+                if instruccion[0].isdecimal():
+                    print(int(instruccion[2]))
+                else:
+                    # Se verifica que la variable del argumento exista
+                    existeVariable = False
+                    for clave in variables:
+                        if clave == instruccion[2]:
+                            existeVariable = True
+                    if not(existeVariable):
+                        print('Error. Llamada a función con argumento que no existe')
+                        return None
+
+                    valor = variables[instruccion[2]]
+                    if isinstance(valor, int):
+                        print(valor)
+                    elif isinstance(valor, list):
+                        ecuacion = ''
+                        # Se concatenan los elementos de la ecuación en una cadena
+                        for token in valor:
+                            ecuacion = ecuacion + ' ' + token
+                        # Se elimina el espacio inicial agregado en el ciclo
+                        ecuacion = ecuacion[1: len(ecuacion)]
+                        print(ecuacion)
+            else:
+                print('Por ahora no es valido')
     return variables
