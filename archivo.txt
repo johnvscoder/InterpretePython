@@ -1,7 +1,7 @@
 y = 400;
 A -> y = x + 3;
 x = 33;
-x = x;
-y = 500;
+A -> x = z - 2;
+B -> y = y - 2;
+x = y;
 imprimir(A);
-y = y;

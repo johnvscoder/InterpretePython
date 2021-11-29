@@ -153,4 +153,18 @@ def ejecutar(sintaxis):
                 variables[instruccion[0]] = valorFinal
             else:
                 variables.setdefault(instruccion[0], valorFinal)
+        elif esEcuacion(instruccion):
+            # Comprobar que la variable de asignacion exista
+            existeVariable = False
+            for clave in variables:
+                    if clave == instruccion[0]:
+                        existeVariable = True
+
+            # Se extrae la ecuación de la variable instruccion
+            valorFinal = instruccion[3 : len(instruccion)]
+            # Asignar el valor a la variable
+            if existeVariable:
+                variables[instruccion[0]] = valorFinal
+            else:
+                variables.setdefault(instruccion[0], valorFinal)
     return variables
