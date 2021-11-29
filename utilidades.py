@@ -75,7 +75,7 @@ def sintaxis(tokens):
         lista.append(instruccion)
     return lista
 
-# probado
+# Probado
 def esInstruccionValida(tokens):
     return esLlamada(tokens) or esAsignacion(tokens) or esEcuacion(tokens)
 
@@ -94,7 +94,7 @@ def esAsignacion(tokens):
     # la primera condición es que el primer token sea identificador
     # la segunda condición es que el segundo token sea =
     # la tercera condición es que el tercer token sea un número
-    return esIdentificador(tokens[0]) and tokens[1] == '=' and tokens[2].isdecimal()
+    return esIdentificador(tokens[0]) and tokens[1] == '=' and (esIdentificador(tokens[2]) or tokens[2].isdecimal())
 
 # Probado
 def esEcuacion(tokens):
